@@ -1,0 +1,11 @@
+{
+    "name": "SonarQube Scanner Setup",
+    "postCreateCommand": "./setup-sonar.sh",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "SonarSource.sonarlint-vscode"
+            ]
+        }
+    }
+} 
