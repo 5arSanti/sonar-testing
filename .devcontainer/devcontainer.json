@@ -1,11 +1,14 @@
 {
     "name": "SonarQube Scanner Setup",
-    "postCreateCommand": "./setup-sonar.sh",
+    "postCreateCommand": "chmod +x setup-sonar.sh && ./setup-sonar.sh",
     "customizations": {
         "vscode": {
             "extensions": [
                 "SonarSource.sonarlint-vscode"
             ]
         }
-    }
+    },
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/workspaces/sonar-testing,type=bind,consistency=cached"
+    ]
 } 

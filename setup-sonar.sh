@@ -4,15 +4,33 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SONAR_DIR="$SCRIPT_DIR/sonar-scanner-7.1.0.4889-linux-x64"
 
-# Verify the directory exists
+# Verify the directory exists and has required files
 if [ ! -d "$SONAR_DIR" ]; then
     echo "Error: SonarQube scanner directory not found at $SONAR_DIR"
     exit 1
 fi
 
+# Verify required files exist
+REQUIRED_FILES=(
+    "bin/sonar-scanner"
+    "lib/sonar-scanner-cli-7.1.0.4889.jar"
+    "jre/bin/java"
+)
+
+for file in "${REQUIRED_FILES[@]}"; do
+    if [ ! -f "$SONAR_DIR/$file" ]; then
+        echo "Error: Required file $file not found in $SONAR_DIR"
+        exit 1
+    fi
+done
+
 # Set JAVA_HOME to use the bundled Java
 export JAVA_HOME="$SONAR_DIR/jre"
 export PATH="$SONAR_DIR/bin:$PATH"
+
+# Make the sonar-scanner and java executable
+chmod +x "$SONAR_DIR/bin/sonar-scanner"
+chmod +x "$SONAR_DIR/jre/bin/java"
 
 # Create a symbolic link in /usr/local/bin if it doesn't exist
 if [ ! -L "/usr/local/bin/sonar-scanner" ]; then
@@ -32,8 +50,12 @@ for RC_FILE in ~/.bashrc ~/.zshrc; do
     fi
 done
 
-# Make the sonar-scanner executable
-chmod +x "$SONAR_DIR/bin/sonar-scanner"
+# Verify the installation
+echo "Verifying installation..."
+if ! "$SONAR_DIR/bin/sonar-scanner" --version; then
+    echo "Error: SonarQube scanner verification failed"
+    exit 1
+fi
 
 echo "SonarQube Scanner has been added to your PATH"
 echo "JAVA_HOME has been set to use the bundled Java"
