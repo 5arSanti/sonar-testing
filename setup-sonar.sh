@@ -1,28 +1,30 @@
-#!/bin/bash
+#!/bin/sh
 
 # Get the absolute path of the sonar-scanner directory
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SONAR_DIR="$SCRIPT_DIR/sonar-scanner-7.1.0.4889-linux-x64"
 
-# Verify the directory exists and has required files
+# Verify the directory exists
 if [ ! -d "$SONAR_DIR" ]; then
     echo "Error: SonarQube scanner directory not found at $SONAR_DIR"
     exit 1
 fi
 
 # Verify required files exist
-REQUIRED_FILES=(
-    "bin/sonar-scanner"
-    "lib/sonar-scanner-cli-7.1.0.4889.jar"
-    "jre/bin/java"
-)
+if [ ! -f "$SONAR_DIR/bin/sonar-scanner" ]; then
+    echo "Error: sonar-scanner executable not found"
+    exit 1
+fi
 
-for file in "${REQUIRED_FILES[@]}"; do
-    if [ ! -f "$SONAR_DIR/$file" ]; then
-        echo "Error: Required file $file not found in $SONAR_DIR"
-        exit 1
-    fi
-done
+if [ ! -f "$SONAR_DIR/lib/sonar-scanner-cli-7.1.0.4889.jar" ]; then
+    echo "Error: sonar-scanner-cli JAR not found"
+    exit 1
+fi
+
+if [ ! -f "$SONAR_DIR/jre/bin/java" ]; then
+    echo "Error: Java executable not found"
+    exit 1
+fi
 
 # Set JAVA_HOME to use the bundled Java
 export JAVA_HOME="$SONAR_DIR/jre"
