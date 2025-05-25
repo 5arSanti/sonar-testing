@@ -7,11 +7,7 @@ UNUSED_VAR = "no se usa"
 def saludar(nombre): 
     print("Hola " + nombre) 
  
-def dividir(a, b): 
-    return a / b 
  
-saludar("Mundo") 
-print(dividir(10, 0)) 
  
 
 def sumar(a, b): 
@@ -26,22 +22,15 @@ def dividir(a, b):
     if b == 0: 
         return "Error: división por cero" 
     return a / b 
-
  
-def operacion_innecesaria(x): 
-    if x > 0: 
-        return True 
-    else: 
-        return True 
+def operacion_innecesaria(): 
+    return True 
 
 def calcular_area1(largo, ancho):
     return largo * ancho
 
 def calcular_area2(l, a):
     return l * a
-
-def dividir(a, b):
-    return a / b
 
 def procesar_datos(dato1, dato2, dato3, dato4, dato5):
     return dato1 + dato2 + dato3 + dato4 + dato5
@@ -57,3 +46,6 @@ def leer_archivo(nombre):
             return f.read()
     except:
         return "Error"
+
+saludar("Mundo") 
+print(dividir(10, 0)) 
